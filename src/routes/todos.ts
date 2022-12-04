@@ -4,7 +4,12 @@ import { Todo } from '../models/todo';
 type RequestBody = { text: string };
 type RequestParams = { todoId: string | number };
 
-let todos: Todo[] = [];
+let todos: Todo[] = [
+    {
+        id:12,
+        text:'hello world'
+    }
+];
 const router = Router();
 
 

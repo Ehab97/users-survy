@@ -14,5 +14,7 @@ const PORT = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5000;
 app.use(express_1.default.json());
 //define routes
 app.use(todos_1.default);
+//34.132.134.162
+//replit-verify=0871f3f3-42fc-448b-ba04-a2eef873ebeb
 //connect db and run server
 app.listen(PORT);
