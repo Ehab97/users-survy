@@ -1,10 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-let todos = [];
+let todos = [
+    {
+        id: 12,
+        text: 'hello world'
+    }
+];
 const router = (0, express_1.Router)();
 router.get('/', (req, res, next) => {
-    res.status(200).json({ todos: todos });
+    res.status(200).json({ msg: 'hello All !!', todos: todos });
 });
 router.post('/todo', (req, res, next) => {
     const body = req.body;
