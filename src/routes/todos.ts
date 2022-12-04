@@ -14,7 +14,7 @@ const router = Router();
 
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({ todos: todos });
+    res.status(200).json({ msg:'hello All !!', todos: todos });
 });
 
 router.post('/todo', (req, res, next) => {
