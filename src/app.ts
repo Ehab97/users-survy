@@ -1,5 +1,6 @@
 import express from 'express';
-import todosRoutes from './routes/todos';
+import userRoutes from './routes/user';
+
 
 //define express
 const app = express();
@@ -7,12 +8,14 @@ const app = express();
 //define constants
 const PORT:number= process.env.PORT ?? 5000
 
+
+//middleware
 //parse data
 app.use(express.json())
-
+//passport
 
 //define routes
-app.use(todosRoutes)
+app.use(userRoutes);
 
 
 //34.132.134.162
