@@ -1,0 +1,10 @@
+{
+  "env":{
+    "DB_USER":"Ehab_Reda",
+    "DB_PASSWORD":"tlavDPV20sYIrY7s",
+    "CLUSTER_NAME":"places",
+    "DB_NAME":"emaily",
+    "DB_URL":"mongodb://127.0.0.1:27017/users-survy",
+    "JWT_PRIVATE_KEY":"supersecret_dont_share"
+  }
+}
