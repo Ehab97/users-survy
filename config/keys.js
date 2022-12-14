@@ -5,7 +5,8 @@
  const DB_PASSWORD ="tlavDPV20sYIrY7s";
  const CLUSTER_NAME="places";
  const mongoAtlasURI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${CLUSTER_NAME}.xthzqey.mongodb.net/${DB_NAME}`;
-// as a text
+ const cookieKey = 'this_is_a_cookie_key_emaily_app_2022';
+ // as a text
  // mongodb+srv://Ehab_Reda:tlavDPV20sYIrY7s@places.xthzqey.mongodb.net/emaily
  module.exports = {
      googleClientID,

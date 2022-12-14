@@ -1,35 +1,23 @@
-import passport, {Profile} from 'passport';
-import {Strategy, VerifyCallback} from 'passport-google-oauth20';
+
+import passport from 'passport';
+import {Strategy} from 'passport-google-oauth20';
 // @ts-ignore
 import {googleClientID,googleClientSecret} from '../../config/keys';
-import userModel from '../models/user-schema';
-//define a middleware to handle passport
+import {deserializeUser, serializeUser, verifyUser} from "../controller/passport-controller";
 
-const passportMiddleware= passport.use(new Strategy({
+
+passport.serializeUser(serializeUser);
+passport.deserializeUser(deserializeUser);
+
+passport.use(new Strategy({
         clientID:googleClientID,
         clientSecret:googleClientSecret,
         callbackURL:'/auth/google/callback'
     },
-     (accessToken:string, refreshToken:string, profile:Profile, done:VerifyCallback)=> {
-         new userModel({
-             googleId:profile.id,
-             name:profile.displayName,
-             email:profile.emails![0].value,
-
-         }).save()
-            .then((user)=>{
-                console.log(user);
-                // done(null,user);
-            })
-            .catch((err)=>console.log(err));
-         console.log(accessToken,refreshToken,profile,done);
-
-        // done(null,profile);
-    }
+    verifyUser
 ));
 
-export default passportMiddleware;
-
+export default passport;
 
 
 

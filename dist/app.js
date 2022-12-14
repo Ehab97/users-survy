@@ -6,6 +6,9 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const express_session_1 = __importDefault(require("express-session"));
+const passport_1 = __importDefault(require("passport"));
+require('./middleware/passport');
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
 // @ts-ignore
 const keys_1 = require("../config/keys");
@@ -21,8 +24,22 @@ const DB_USER = process.env.DB_USER;
 const mongoAtlas = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${CLUSTER_NAME}.xthzqey.mongodb.net/${DB_NAME}`;
 //middleware
 //parse data
-app.use(express_1.default.json());
 //passport
+// app.use(
+//     cookieSession({
+//         maxAge: 30*24 * 60 * 60 * 1000,
+//         keys:[cookieKey]
+//     })
+// )
+app.use((0, express_session_1.default)({
+    secret: 'this_is_a_cookie_key_emaily_app_2022',
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(express_1.default.json());
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 //define routes
 app.use(userAuth_1.default);
 //34.132.134.162
@@ -30,8 +47,8 @@ app.use(userAuth_1.default);
 //https://users-survy.ehabreda.repl.co/
 //connect db and run server
 console.log(keys_1.mongoAtlasURI);
-mongoose_1.default.connect(keys_1.mongoAtlasURI) //atlas
-    // mongoose.connect(DB_URL) //DB_URL || mongoAtlas
+// mongoose.connect(mongoAtlasURI) //atlas
+mongoose_1.default.connect(DB_URL) //DB_URL || mongocompass
     .then((res) => {
     console.log('connected to db');
     app.listen(PORT, () => {
