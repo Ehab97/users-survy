@@ -6,6 +6,7 @@ declare global {
             PORT: number;
             DB_USER: string;
             ENV: 'test' | 'dev' | 'prod';
+            COOKIE_KEY: string;
         }
     }
 }
