@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 app.use(userAuth_1.default);
 //34.132.134.162
 //replit-verify=0871f3f3-42fc-448b-ba04-a2eef873ebeb
-//https://users-survy.ehabreda.repl.co/
+//replit-verify=0871f3f3-42fc-448b-ba04-a2eef873ebeb
 //connect db and run server
 // mongoAtlasURI for atlas
 // DB_URL for local compass db

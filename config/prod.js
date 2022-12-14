@@ -10,4 +10,5 @@ module.exports = {
     googleClientID:process.env.GOOGLE_CLIENT_ID,
     googleClientSecret:process.env.GOOGLE_CLIENT_SECRET,
     mongoAtlasURI:process.env.MONGO_ATLAS_URI,
+    isDev:false
 }

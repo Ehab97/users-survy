@@ -13,6 +13,6 @@ passport_1.default.deserializeUser(passport_controller_1.deserializeUser);
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: keys_1.googleClientID,
     clientSecret: keys_1.googleClientSecret,
-    callbackURL: '/auth/google/callback'
+    callbackURL: keys_1.isDev ? '/auth/google/callback' : process.env.BASE_URL + 'auth/google/callback'
 }, passport_controller_1.verifyUser));
 exports.default = passport_1.default;

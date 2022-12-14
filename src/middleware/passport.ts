@@ -2,7 +2,7 @@
 import passport from 'passport';
 import {Strategy} from 'passport-google-oauth20';
 // @ts-ignore
-import {googleClientID,googleClientSecret} from '../../config/keys';
+import {googleClientID,googleClientSecret,isDev} from '../../config/keys';
 import {deserializeUser, serializeUser, verifyUser} from "../controller/passport-controller";
 
 
@@ -12,7 +12,7 @@ passport.deserializeUser(deserializeUser);
 passport.use(new Strategy({
         clientID:googleClientID,
         clientSecret:googleClientSecret,
-        callbackURL:'/auth/google/callback'
+        callbackURL:isDev?'/auth/google/callback':process.env.BASE_URL+'auth/google/callback'
     },
     verifyUser
 ));

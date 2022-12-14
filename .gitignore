@@ -1,3 +1,5 @@
 node_modules
 config/dev.js
 dist
+.DS_Store
+cli.txt
