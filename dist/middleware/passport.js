@@ -13,7 +13,8 @@ passport_1.default.deserializeUser(passport_controller_1.deserializeUser);
 passport_1.default.use(new passport_google_oauth20_1.Strategy({
     clientID: keys_1.googleClientID,
     clientSecret: keys_1.googleClientSecret,
-    callbackURL: !process.env.NODE_ENV ? '/auth/google/callback' : process.env.BASE_URL + '/auth/google/callback'
+    callbackURL: !process.env.NODE_ENV ? '/auth/google/callback' : process.env.BASE_URL + '/auth/google/callback',
+    proxy: true
 }, passport_controller_1.verifyUser));
 exports.default = passport_1.default;
 //'https://users-survy.ehabreda.repl.co/auth/google/callback'

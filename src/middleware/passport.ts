@@ -12,7 +12,9 @@ passport.deserializeUser(deserializeUser);
 passport.use(new Strategy({
         clientID:googleClientID,
         clientSecret:googleClientSecret,
-        callbackURL:!process.env.NODE_ENV?'/auth/google/callback':process.env.BASE_URL+'/auth/google/callback'
+        callbackURL:!process.env.NODE_ENV?'/auth/google/callback':process.env.BASE_URL+'/auth/google/callback',
+        proxy:true
+
     },
     verifyUser
 ));
