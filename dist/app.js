@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const express_session_1 = __importDefault(require("express-session"));
 const passport_1 = __importDefault(require("passport"));
+const connect_mongo_1 = __importDefault(require("connect-mongo"));
 require('./middleware/passport');
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
 require('dotenv').config();
@@ -15,6 +16,7 @@ require('dotenv').config();
 const keys_1 = require("../config/keys");
 //define express
 const app = (0, express_1.default)();
+app.set('trust proxy', 1);
 //define constants
 const PORT = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5000;
 const DB_URL = process.env.DB_URL || '';
@@ -26,7 +28,11 @@ app.use((0, express_session_1.default)({
     secret: process.env.COOKIE_KEY,
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: connect_mongo_1.default.create({
+        mongoUrl: keys_1.mongoAtlasURI,
+        ttl: 30 * 24 * 60 * 60 * 1000,
+    })
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());

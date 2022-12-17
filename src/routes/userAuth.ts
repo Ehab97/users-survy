@@ -11,7 +11,15 @@ router.get(`/auth/google/callback`,
     (req, res) => {
         res.redirect('/api/current_user');
 });
-
+/*
+  app.get(
+    "/auth/google/callback",
+    passport.authenticate("google"),
+    (req, res) => {
+      res.redirect("/surveys");
+    }
+  );
+ */
 router.get("/api/logout", (req:any, res) => {
     req?.logout();
     res.send(req.user);

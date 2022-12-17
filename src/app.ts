@@ -2,8 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import session from "express-session";
 import passport from 'passport';
+import MongoStore from "connect-mongo";
 require('./middleware/passport');
 import userAuthRoutes from './routes/userAuth';
+
 require('dotenv').config();
 // @ts-ignore
 import {mongoAtlasURI,cookieKey} from '../config/keys';
@@ -12,6 +14,7 @@ import {mongoAtlasURI,cookieKey} from '../config/keys';
 //define express
 const app = express();
 
+app.set('trust proxy', 1);
 //define constants
 const PORT:number= process.env.PORT ?? 5000
 const DB_URL: string = process.env.DB_URL ||'';
@@ -26,7 +29,11 @@ app.use(
         secret:process.env.COOKIE_KEY,
         cookie:{maxAge: 30*24 * 60 * 60 * 1000},
         resave:false,
-        saveUninitialized:true
+        saveUninitialized:true,
+        store: MongoStore.create({
+            mongoUrl: mongoAtlasURI,
+            ttl: 30 * 24 * 60 * 60 * 1000,
+        })
     })
 );
 
