@@ -43,6 +43,9 @@ app.use((req, res, next) => {
     next();
 });
 //define routes
+app.get('/', (req, res) => {
+    res.send('Hello World! nodeJS');
+});
 app.use(userAuth_1.default);
 //34.132.134.162
 //replit-verify=0871f3f3-42fc-448b-ba04-a2eef873ebeb

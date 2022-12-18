@@ -49,6 +49,9 @@ app.use((req, res, next) => {
 })
 
 //define routes
+app.get('/', (req, res) => {
+    res.send('Hello World! nodeJS');
+})
 app.use(userAuthRoutes);
 
 
