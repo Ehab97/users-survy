@@ -3,7 +3,6 @@ import {VerifyCallback} from "passport-google-oauth20";
 import userModel from "../models/user-schema";
 
 export const verifyUser= async (accessToken:string, refreshToken:string, profile:Profile, done:VerifyCallback)=> {
-    //check if user exists
     try {
         const existingUser = await userModel.findOne({googleId:profile.id});
         if(existingUser){

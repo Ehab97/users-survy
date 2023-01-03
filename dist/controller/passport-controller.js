@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deserializeUser = exports.serializeUser = exports.verifyUser = void 0;
 const user_schema_1 = __importDefault(require("../models/user-schema"));
 const verifyUser = (accessToken, refreshToken, profile, done) => __awaiter(void 0, void 0, void 0, function* () {
-    //check if user exists
     try {
         const existingUser = yield user_schema_1.default.findOne({ googleId: profile.id });
         if (existingUser) {
