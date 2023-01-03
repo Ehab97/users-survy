@@ -6,12 +6,9 @@ import MongoStore from "connect-mongo";
 require('./middleware/passport');
 import userAuthRoutes from './routes/userAuth';
 import userBillingRoutes from './routes/userBilling';
-
 require('dotenv').config();
 // @ts-ignore
 import {mongoAtlasURI,cookieKey} from '../config/keys';
-import {checkLogin} from "./middleware/loginAuth";
-
 
 //define express
 const app = express();
