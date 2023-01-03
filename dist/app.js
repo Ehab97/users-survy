@@ -13,6 +13,8 @@ require('./middleware/passport');
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
 const userBilling_1 = __importDefault(require("./routes/userBilling"));
 require('dotenv').config();
+// @ts-ignore
+const keys_1 = require("../config/keys");
 //define express
 const app = (0, express_1.default)();
 app.set('trust proxy', 1);
@@ -29,8 +31,8 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true,
     store: connect_mongo_1.default.create({
-        // mongoUrl: mongoAtlasURI,
-        mongoUrl: DB_URL,
+        mongoUrl: keys_1.mongoAtlasURI,
+        // mongoUrl: DB_URL,
         ttl: 30 * 24 * 60 * 60 * 1000,
     })
 }));
@@ -52,8 +54,8 @@ console.log(DB_URL);
 //connect db and run server
 // mongoAtlasURI for atlas
 // DB_URL for local compass db
-// mongoose.connect(mongoAtlasURI) //atlas
-mongoose_1.default.connect(DB_URL) //DB_URL || MongoCompass
+mongoose_1.default.connect(keys_1.mongoAtlasURI) //atlas
+    // mongoose.connect(DB_URL) //DB_URL || MongoCompass
     .then((res) => {
     console.log('connected to db');
     app.listen(PORT, () => {

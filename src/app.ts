@@ -33,8 +33,8 @@ app.use(
         resave:false,
         saveUninitialized:true,
         store: MongoStore.create({
-            // mongoUrl: mongoAtlasURI,
-            mongoUrl: DB_URL,
+            mongoUrl: mongoAtlasURI,
+            // mongoUrl: DB_URL,
             ttl: 30 * 24 * 60 * 60 * 1000,
         })
     })
@@ -63,8 +63,8 @@ console.log(DB_URL)
 //connect db and run server
 // mongoAtlasURI for atlas
 // DB_URL for local compass db
-// mongoose.connect(mongoAtlasURI) //atlas
-mongoose.connect(DB_URL) //DB_URL || MongoCompass
+mongoose.connect(mongoAtlasURI) //atlas
+// mongoose.connect(DB_URL) //DB_URL || MongoCompass
 .then((res)=>{
     console.log('connected to db');
     app.listen(PORT,()=>{
