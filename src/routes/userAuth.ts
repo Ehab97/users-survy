@@ -10,7 +10,12 @@ router.get(
     `/auth/google/callback`,
     passport.authenticate('google'),
     (req, res) => {
-        res.redirect('/surveys');
+        if(process.env.NODE_ENV === 'production'){
+            res.redirect('https://feedbox-sigma.vercel.app/surveys');
+        }else{
+            res.redirect('http://localhost:3000/surveys');
+        }
+
     }
 );
 
