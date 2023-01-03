@@ -14,7 +14,6 @@ passport.use(new Strategy({
         clientSecret:googleClientSecret,
         callbackURL:!process.env.NODE_ENV?'/auth/google/callback':process.env.BASE_URL+'/auth/google/callback',
         proxy:true
-
     },
     verifyUser
 ));

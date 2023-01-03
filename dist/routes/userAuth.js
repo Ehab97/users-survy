@@ -10,26 +10,17 @@ router.get('/auth/google', passport_1.default.authenticate('google', {
     scope: ['profile', 'email']
 }));
 router.get(`/auth/google/callback`, passport_1.default.authenticate('google'), (req, res) => {
-    res.redirect('/api/current_user');
+    res.redirect('/surveys');
 });
-/*
-  app.get(
-    "/auth/google/callback",
-    passport.authenticate("google"),
-    (req, res) => {
-      res.redirect("/surveys");
-    }
-  );
- */
 router.get("/api/logout", (req, res) => {
-    req === null || req === void 0 ? void 0 : req.logout();
-    res.send(req.user);
+    req.logout();
+    res.redirect('/');
 });
 router.get(`/api/current_user`, (req, res, next) => {
-    console.log('req user', req.user, req.session);
-    res.send({
+    console.log('req user', req.user);
+    res.status(200).send({
         user: req.user,
-        message: 'hello world'
+        message: 'Success'
     });
 });
 exports.default = router;
