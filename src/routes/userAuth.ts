@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from '../middleware/passport';
+import * as Process from "process";
 const router = express.Router();
 
 router.get('/auth/google',passport.authenticate('google',{
@@ -10,12 +11,7 @@ router.get(
     `/auth/google/callback`,
     passport.authenticate('google'),
     (req, res) => {
-        if(process.env.NODE_ENV === 'production'){
-            res.redirect('https://feedbox-sigma.vercel.app/surveys');
-        }else{
-            res.redirect('http://localhost:3000/surveys');
-        }
-
+        process.env.NODE_ENV?res.redirect(process.env.WEBSITE_URL+'/surveys'):res.redirect(process.env.WEBSITE_URL_LOCAL+'/surveys')
     }
 );
 

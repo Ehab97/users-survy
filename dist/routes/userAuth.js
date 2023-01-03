@@ -10,12 +10,7 @@ router.get('/auth/google', passport_1.default.authenticate('google', {
     scope: ['profile', 'email']
 }));
 router.get(`/auth/google/callback`, passport_1.default.authenticate('google'), (req, res) => {
-    if (process.env.NODE_ENV === 'production') {
-        res.redirect('https://feedbox-sigma.vercel.app/surveys');
-    }
-    else {
-        res.redirect('http://localhost:3000/surveys');
-    }
+    process.env.NODE_ENV ? res.redirect(process.env.WEBSITE_URL + '/surveys') : res.redirect(process.env.WEBSITE_URL_LOCAL + '/surveys');
 });
 router.get("/api/logout", (req, res) => {
     req.logout();
