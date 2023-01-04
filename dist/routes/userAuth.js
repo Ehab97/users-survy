@@ -15,7 +15,7 @@ router.get(`/auth/google/callback`, passport_1.default.authenticate('google'), (
     console.log(req.user);
     const expires = 30 * 24 * 60 * 60 * 1000;
     res.cookie('user', req.user, { maxAge: expires });
-    process.env.NODE_ENV ? res.redirect(process.env.WEBSITE_URL + '/surveys') : res.redirect(process.env.WEBSITE_URL_LOCAL + '/surveys');
+    process.env.NODE_ENV ? res.redirect(process.env.WEBSITE_URL2 + '/surveys') : res.redirect(process.env.WEBSITE_URL_LOCAL + '/surveys');
 });
 router.get("/api/logout", (req, res) => {
     req.logout();
