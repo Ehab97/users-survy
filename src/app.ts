@@ -7,6 +7,7 @@ require('./middleware/passport');
 import userAuthRoutes from './routes/userAuth';
 import userBillingRoutes from './routes/userBilling';
 require('dotenv').config();
+const cors = require('cors');
 // @ts-ignore
 import {mongoAtlasURI,cookieKey} from '../config/keys';
 
@@ -47,6 +48,14 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
     next();
 })
+//alloow for cors http://localhost:3000 and https://feedbox-sigma.vercel.app/
+const corsOptions = {
+    origin: ['http://localhost:3000','https://feedbox-sigma.vercel.app/'],
+    credentials: true,
+    optionsSuccessStatus: 200
+
+};
+app.use(cors(corsOptions));
 
 //define routes
 app.get('/', (req, res) => {

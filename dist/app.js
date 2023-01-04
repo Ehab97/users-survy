@@ -13,6 +13,7 @@ require('./middleware/passport');
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
 const userBilling_1 = __importDefault(require("./routes/userBilling"));
 require('dotenv').config();
+const cors = require('cors');
 // @ts-ignore
 const keys_1 = require("../config/keys");
 //define express
@@ -44,6 +45,13 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
     next();
 });
+//alloow for cors http://localhost:3000 and https://feedbox-sigma.vercel.app/
+const corsOptions = {
+    origin: ['http://localhost:3000', 'https://feedbox-sigma.vercel.app/'],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 //define routes
 app.get('/', (req, res) => {
     res.send('Hello World! nodeJS');
