@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 });
 //alloow for cors http://localhost:3000 and https://feedbox-sigma.vercel.app/
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://feedbox-sigma.vercel.app/'],
+    origin: ['http://localhost:3000', 'https://feedbox-sigma.vercel.app'],
     credentials: true,
     optionsSuccessStatus: 200
 };
