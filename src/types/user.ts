@@ -4,7 +4,7 @@ export interface User{
     id?:string;
     googleId?:string;
     image?:string;
-    credits?:number
+    credits:number
     token?:any
 }
 

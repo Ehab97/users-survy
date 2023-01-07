@@ -12,6 +12,7 @@ const connect_mongo_1 = __importDefault(require("connect-mongo"));
 require('./middleware/passport');
 const userAuth_1 = __importDefault(require("./routes/userAuth"));
 const userBilling_1 = __importDefault(require("./routes/userBilling"));
+const surveys_1 = __importDefault(require("./routes/surveys"));
 require('dotenv').config();
 const cors = require('cors');
 // @ts-ignore
@@ -58,6 +59,7 @@ app.get('/', (req, res) => {
 });
 app.use(userAuth_1.default);
 app.use(userBilling_1.default);
+app.use(surveys_1.default);
 console.log(DB_URL);
 //connect db and run server
 // mongoAtlasURI for atlas

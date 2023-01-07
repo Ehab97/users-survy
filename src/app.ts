@@ -6,6 +6,7 @@ import MongoStore from "connect-mongo";
 require('./middleware/passport');
 import userAuthRoutes from './routes/userAuth';
 import userBillingRoutes from './routes/userBilling';
+import surveyRoutes from './routes/surveys';
 require('dotenv').config();
 const cors = require('cors');
 // @ts-ignore
@@ -65,6 +66,7 @@ app.use(userAuthRoutes);
 
 app.use(userBillingRoutes);
 
+app.use(surveyRoutes);
 console.log(DB_URL)
 //connect db and run server
 // mongoAtlasURI for atlas
