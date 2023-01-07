@@ -6,7 +6,6 @@ const DB_USER="Ehab_Reda";
 const DB_PASSWORD ="tlavDPV20sYIrY7s";
 const CLUSTER_NAME="places";
 const mongoAtlasURI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${CLUSTER_NAME}.xthzqey.mongodb.net/${DB_NAME}`;
-const sendGridKey=`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`;
 module.exports = {
     googleClientID:process.env.GOOGLE_CLIENT_ID,
     googleClientSecret:process.env.GOOGLE_CLIENT_SECRET,

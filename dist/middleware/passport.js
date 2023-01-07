@@ -17,5 +17,3 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
     proxy: true
 }, passport_controller_1.verifyUser));
 exports.default = passport_1.default;
-//'https://users-survy.ehabreda.repl.co/auth/google/callback'
-//https://users-survy.ehabreda.repl.co/auth/google/callback

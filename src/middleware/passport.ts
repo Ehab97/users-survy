@@ -19,8 +19,6 @@ passport.use(new Strategy({
 ));
 
 export default passport;
-//'https://users-survy.ehabreda.repl.co/auth/google/callback'
-//https://users-survy.ehabreda.repl.co/auth/google/callback
 
 
 
