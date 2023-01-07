@@ -60,13 +60,17 @@ export default class Mailer extends helper.Mail{
     // public toJSON: any;
       constructor({subject,recipients}:Survey,content:string){
           super();
+          // @ts-ignore
           this.sgApi=sendGrid(sendGridKey);
-
+          // @ts-ignore
           this.from_email=new helper.Email(`ehabreda04@gmail.com`);
+          // @ts-ignore
           this.subject=subject;
+          // @ts-ignore
           this.body=new helper.Content('text/html',content);
+          // @ts-ignore
           this.recipients=this.formatAddresses(recipients);
-
+          // @ts-ignore
           this.addContent(this.body);
           this.addClickTracking();
           this.addRecipients();
@@ -88,6 +92,7 @@ export default class Mailer extends helper.Mail{
 
     addRecipients(){
         const personalize=new helper.Personalization();
+        // @ts-ignore
         this.recipients.forEach((recipient:any)=>{
             personalize.addTo(recipient)
         });
@@ -95,14 +100,17 @@ export default class Mailer extends helper.Mail{
     }
 
     async send(){
+        // @ts-ignore
           const request=this.sgApi.emptyRequest({
               method:'POST',
               path: "/v3/mail/send",
               body:this.toJSON()
           });
+        // @ts-ignore
           console.log('request',request,this.from_email)
           let response;
         try {
+            // @ts-ignore
          response=await  this.sgApi.API(request);
             return response;
         }catch (e) {
