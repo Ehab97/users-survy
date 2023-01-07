@@ -7,7 +7,7 @@ const DB_USER="Ehab_Reda";
 const DB_PASSWORD ="tlavDPV20sYIrY7s";
 const CLUSTER_NAME="places";
 const mongoAtlasURI = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${CLUSTER_NAME}.xthzqey.mongodb.net/${DB_NAME}`;
-const sendGridKey=`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`;
+const sendGridKey=`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`;
 const clientDomain='http://localhost:3000';
 // as a text
 // mongodb+srv://Ehab_Reda:tlavDPV20sYIrY7s@places.xthzqey.mongodb.net/emaily

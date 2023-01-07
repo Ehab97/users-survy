@@ -3,3 +3,4 @@ config/dev.js
 dist
 .DS_Store
 cli.txt
+.env

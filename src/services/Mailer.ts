@@ -61,7 +61,7 @@ export default class Mailer extends helper.Mail{
       constructor({subject,recipients}:Survey,content:string){
           super();
           // @ts-ignore
-          this.sgApi=sendGrid(sendGridKey);
+          this.sgApi=sendGrid(sendGridKey2);
           // @ts-ignore
           this.from_email=new helper.Email(`ehabreda04@gmail.com`);
           // @ts-ignore
