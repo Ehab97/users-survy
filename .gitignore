@@ -5,6 +5,5 @@ config/dev.js
 dev.js
 dist/
 .DS_Store
-cli.txt
 # dotenv environment variable files
 .env
