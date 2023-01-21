@@ -26,10 +26,10 @@ export const surveyTemplate = (survey: Survey) => {
                 <p>${survey.body}</p>
                 
                      <div >
-                         <a href="${!process.env.BASE_URL?'':process.env.BASE_URL}/api/surveys/thanks">Yes</a>
+                         <a href="${!process.env.BASE_URL?'':process.env.BASE_URL}/api/surveys/${survey.id}/yes">Yes</a>
                     </div>
                     <div>
-                        <a href="${!process.env.BASE_URL?'':process.env.BASE_URL}/api/surveys/thanks">No</a>
+                        <a href="${!process.env.BASE_URL?'':process.env.BASE_URL}/api/surveys/${survey.id}/no">No</a>
                     </div>
               
             </div>

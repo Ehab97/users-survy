@@ -5,7 +5,7 @@ import {checkCredits, checkLogin} from "../middleware/userAuth";
 export const router = Router();
 
 //get all surveys
-router.get('/api/surveys', getSurveys);
+router.get('/api/surveys',checkLogin, getSurveys);
 //create new survey
 router.post('/api/surveys',checkLogin,checkCredits, createSurvey);
 //survey thanks

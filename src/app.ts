@@ -49,7 +49,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
     next();
 })
-//alloow for cors http://localhost:3000 and https://feedbox-sigma.vercel.app/
+//allow for cors http://localhost:3000 and https://feedbox-sigma.vercel.app/
 const corsOptions = {
     origin: ['http://localhost:3000','https://feedbox-sigma.vercel.app','https://feedbox.onrender.com'],
     credentials: true,

@@ -49,19 +49,10 @@ const helper = sendGrid.mail;
 
 export default class Mailer extends helper.Mail{
 
-    // public sgApi: any;
-    // public from_email: any;
-    // public subject: any;
-    // public body: any;
-    // public recipients: any;
-    // public addContent: any;
-    // public addTrackingSettings: any;
-    // public addPersonalization: any;
-    // public toJSON: any;
       constructor({subject,recipients}:Survey,content:string){
           super();
           // @ts-ignore
-          this.sgApi=sendGrid(sendGridKey2);
+          this.sgApi=sendGrid(sendGridKey);
           // @ts-ignore
           this.from_email=new helper.Email(`ehabreda04@gmail.com`);
           // @ts-ignore
@@ -94,6 +85,7 @@ export default class Mailer extends helper.Mail{
         const personalize=new helper.Personalization();
         // @ts-ignore
         this.recipients.forEach((recipient:any)=>{
+            console.log('recipient',recipient)
             personalize.addTo(recipient)
         });
         this.addPersonalization(personalize);

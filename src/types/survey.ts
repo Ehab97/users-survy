@@ -10,7 +10,7 @@ export interface Survey{
     title: string;
     subject: string;
     body: string;
-    recipients: [Recipient];
+    recipients: [Recipient] ;
     yes?: number;
     no?: number;
     _user?: ObjectId;
