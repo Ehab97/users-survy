@@ -113,43 +113,25 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
         })
         .compact()
         .uniqBy((v) => [v.email, v.surveyId].join())
-        // .each(  ({surveyId,email,choice})=>{
-        //     SurveyModel.updateOne({
-        //         _id:surveyId,
-        //         recipients:{
-        //             $elemMatch:{email:email,responded:false}
-        //         }
-        //     },{
-        //         $inc:{[choice]:1},
-        //         $set:{'recipients.$.responded':true},
-        //         lastResponded:new Date()
-        //     }).exec();
-        // })
-        .value();
-
-    // loop on events async
-    for (let i = 0; i < events.length; i++) {
-        const { surveyId, email, choice } = events[i];
-        const survey = await  SurveyModel.updateOne(
-            {
-                _id: surveyId,
-                recipients: {
-                    $elemMatch: { email: email, responded: false },
+        //update survey collection
+        .each(({ surveyId, email, choice }) => {
+            SurveyModel.updateOne(
+                {
+                    _id: surveyId,
+                    recipients: {
+                        $elemMatch: { email: email, responded: false },
+                    },
                 },
-            },
-            {
-                $inc: { [choice]: 1 },
-                $set: { "recipients.$.responded": true },
-                lastResponded: new Date(),
-            }
-        ).exec((err,res)=>{
-            console.log('err',err,res)
-        });
-
-        // if (survey) {
-        //     console.log("survey", survey);
-        // }
-    }
+                {
+                    $inc: { [choice]: 1 },
+                    $set: { "recipients.$.responded": true },
+                    lastResponded: new Date(),
+                }
+            ).exec();
+        })
+        .value();
+    console.log('events',events)
+    // loop on events async
 
     res.send({ message: "Thanks for your feedback", events });
 };
