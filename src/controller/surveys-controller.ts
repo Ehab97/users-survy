@@ -17,8 +17,8 @@ interface SurveyWebhookRequestBody {
     email: string;
     url: string;
     event: string;
-    timestamp: number;
-    ip: string;
+    timestamp?: number;
+    ip?: string;
 }
 
 interface WebhookData {
@@ -103,19 +103,21 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
     let {body}=req as WebhookData;
     const p=new Path("/api/surveys/:surveyId/:choice");
     const events=_.chain(body)
-        .map(({email,url})=>{
-            const pathname=new URL(url).pathname;
-            const match=p.test(pathname);
-            if(match){
-                return {email,surveyId:match.surveyId,choice:match.choice}
+        .map(({email,url,event})=>{
+            if(event==='click'){
+                const pathname=new URL(url).pathname;
+                const match=p.test(pathname);
+                if(match){
+                    return {email,surveyId:match.surveyId,choice:match.choice}
+                }
             }
         })
         .compact()
         .uniqBy(
     v => [v.email, v.surveyId].join()
         )
-        .each(({surveyId,email,choice})=>{
-            SurveyModel.updateOne({
+        .each(async ({surveyId,email,choice})=>{
+           const survey=await SurveyModel.updateOne({
                 _id:surveyId,
                 recipients:{
                     $elemMatch:{email:email,responded:false}
@@ -125,6 +127,10 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
                 $set:{'recipients.$.responded':true},
                 lastResponded:new Date()
             }).exec();
+
+           if (survey) {
+               console.log('survey updated',survey)
+           }
 
         })
         .value();

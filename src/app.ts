@@ -67,7 +67,8 @@ app.use(userAuthRoutes);
 app.use(userBillingRoutes);
 
 app.use(surveyRoutes);
-console.log(DB_URL)
+console.log(DB_URL);
+console.log(mongoAtlasURI);
 //connect db and run server
 // mongoAtlasURI for atlas
 // DB_URL for local compass db
