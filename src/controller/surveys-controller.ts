@@ -102,7 +102,7 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
     console.log('recordSurveyFeedback',req.body)
     let {body}=req as WebhookData;
     const p=new Path("/api/surveys/:surveyId/:choice");
-    const events=_.chain(body)
+    const events= _.chain(body)
         .map(({email,url,event})=>{
             if(event==='click'){
                 const pathname=new URL(url).pathname;
@@ -116,7 +116,7 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
         .uniqBy(
     v => [v.email, v.surveyId].join()
         )
-        .each(async ({surveyId,email,choice})=>{
+        .map( async ({surveyId,email,choice})=>{
            const survey=await SurveyModel.updateOne({
                 _id:surveyId,
                 recipients:{
