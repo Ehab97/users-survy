@@ -115,19 +115,32 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
         .uniqBy((v) => [v.email, v.surveyId].join())
         //update survey collection
         .each(({ surveyId, email, choice }) => {
-            SurveyModel.updateOne(
+            SurveyModel.findOneAndUpdate(
                 {
                     _id: surveyId,
                     recipients: {
                         $elemMatch: { email: email, responded: false },
-                    },
+                    }
                 },
                 {
                     $inc: { [choice]: 1 },
                     $set: { "recipients.$.responded": true },
                     lastResponded: new Date(),
                 }
-            ).exec();
+            )
+            // SurveyModel.updateOne(
+            //     {
+            //         _id: surveyId,
+            //         recipients: {
+            //             $elemMatch: { email: email, responded: false },
+            //         },
+            //     },
+            //     {
+            //         $inc: { [choice]: 1 },
+            //         $set: { "recipients.$.responded": true },
+            //         lastResponded: new Date(),
+            //     }
+            // ).exec();
         })
         .value();
     console.log('events',events)
