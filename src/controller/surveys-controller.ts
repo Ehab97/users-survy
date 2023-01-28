@@ -107,6 +107,7 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
             if(event==='click'){
                 const pathname=new URL(url).pathname;
                 const match=p.test(pathname);
+                console.log('match',match,pathname)
                 if(match){
                     return {email,surveyId:match.surveyId,choice:match.choice}
                 }
@@ -116,8 +117,24 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
         .uniqBy(
     v => [v.email, v.surveyId].join()
         )
-        .map( async ({surveyId,email,choice})=>{
-           const survey=await SurveyModel.updateOne({
+        // .each(  ({surveyId,email,choice})=>{
+        //     SurveyModel.updateOne({
+        //         _id:surveyId,
+        //         recipients:{
+        //             $elemMatch:{email:email,responded:false}
+        //         }
+        //     },{
+        //         $inc:{[choice]:1},
+        //         $set:{'recipients.$.responded':true},
+        //         lastResponded:new Date()
+        //     }).exec();
+        // })
+        .value();
+
+        // loop on events async
+        for (let i = 0; i < events.length; i++) {
+            const {surveyId,email,choice}=events[i];
+            const survey= await SurveyModel.updateOne({
                 _id:surveyId,
                 recipients:{
                     $elemMatch:{email:email,responded:false}
@@ -128,12 +145,10 @@ export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunct
                 lastResponded:new Date()
             }).exec();
 
-           if (survey) {
-               console.log('survey updated',survey)
-           }
-
-        })
-        .value();
+            if(survey){
+                console.log('survey updated',survey)
+            }
+        }
 
     res.send({message:'Thanks for your feedback',events});
 };
