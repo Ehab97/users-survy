@@ -5,6 +5,9 @@ import {User} from "../types/user";
 import userModel from "../models/user-schema";
 import Mailer from "../services/Mailer";
 import {surveyTemplate} from "../helpers/emailTemplate";
+import _ from "lodash";
+import {Path} from "path-parser";
+import {URL} from "url";
 
 interface SurveyRequestBody extends  Omit<Survey, 'recipients'> {
     recipients: string;
@@ -16,6 +19,10 @@ interface SurveyWebhookRequestBody {
     event: string;
     timestamp: number;
     ip: string;
+}
+
+interface WebhookData {
+    body:SurveyWebhookRequestBody[];
 }
 
 export const getSurveys = async (req:Request, res:Response, next:NextFunction) => {
@@ -93,8 +100,34 @@ export const getSurveysThanks= (req:Request,res:Response,next:NextFunction)=>{
 
 export const recordSurveyFeedback=async (req:Request,res:Response,next:NextFunction)=>{
     console.log('recordSurveyFeedback',req.body)
-    let body=req.body as SurveyWebhookRequestBody;
-    let {email,url,event,timestamp,ip}=body;
+    let {body}=req as WebhookData;
+    const p=new Path("/api/surveys/:surveyId/:choice");
+    const events=_.chain(body)
+        .map(({email,url})=>{
+            const pathname=new URL(url).pathname;
+            const match=p.test(pathname);
+            if(match){
+                return {email,surveyId:match.surveyId,choice:match.choice}
+            }
+        })
+        .compact()
+        .uniqBy(
+    v => [v.email, v.surveyId].join()
+        )
+        .each(({surveyId,email,choice})=>{
+            SurveyModel.updateOne({
+                _id:surveyId,
+                recipients:{
+                    $elemMatch:{email:email,responded:false}
+                }
+            },{
+                $inc:{[choice]:1},
+                $set:{'recipients.$.responded':true},
+                lastResponded:new Date()
+            }).exec();
 
-    res.send({message:'Thanks for your feedback'});
+        })
+        .value();
+
+    res.send({message:'Thanks for your feedback',events});
 };
