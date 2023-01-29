@@ -114,8 +114,8 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
         .compact()
         // .uniqBy((v) => [v.email, v.surveyId].join())
         .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
-        .each(({ surveyId, email, choice }) => {
-            SurveyModel.updateOne(
+        .map(({ surveyId, email, choice }) => {
+           return SurveyModel.updateOne(
                 {
                     _id: surveyId,
                     recipients: {
@@ -127,9 +127,10 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
                     $set: { "recipients.$.responded": true },
                     lastResponded: new Date(),
                 }
-            ).then(result => console.log(result));
+            );
         })
         .value();
+    await Promise.all(events).then((res)=>console.log('res',res));
 
 
   //    const events = _.chain(body)
