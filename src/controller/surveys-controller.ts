@@ -120,6 +120,7 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
     for (let i = 0; i < events.length; i++) {
         let { surveyId, email, choice } = events[i];
         //find survey and update
+        let sur=await SurveyModel.findOne({_id: surveyId});
         let survey=await SurveyModel.findOneAndUpdate({
                 _id: surveyId,
                 recipients: {
@@ -133,7 +134,7 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
             });
         //save survey
         if(survey) await survey.save();
-        console.log('survey second',survey);
+        console.log('survey second',survey,sur);
     }
 
     res.send({ message: "Thanks for your feedback", events });
