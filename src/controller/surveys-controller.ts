@@ -120,7 +120,9 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
     for (let i = 0; i < events.length; i++) {
         let { surveyId, email, choice } = events[i];
         //find survey and update
-        let sur=await SurveyModel.findOne({_id: surveyId});
+        //use ObjectId to find survey
+
+        let sur=await SurveyModel.findById(surveyId);
         let survey=await SurveyModel.findOneAndUpdate({
                 _id: surveyId,
                 recipients: {
