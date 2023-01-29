@@ -117,27 +117,6 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
      })
     .value();
     console.log('events',events);
-    for (let i = 0; i < events.length; i++) {
-        let { surveyId, email, choice } = events[i];
-        //find survey and update
-        //use ObjectId to find survey
-
-        let sur=await SurveyModel.findById(surveyId);
-        let survey=await SurveyModel.findOneAndUpdate({
-                _id: surveyId,
-                recipients: {
-                    $elemMatch: { email: email, responded: false },
-                },
-            },
-            {
-                $inc: { [choice]: 1 },
-                $set: { 'recipients.$.responded': true },
-                lastResponded: new Date(),
-            });
-        //save survey
-        if(survey) await survey.save();
-        console.log('survey second',survey,sur);
-    }
 
     res.send({ message: "Thanks for your feedback", events });
 };
