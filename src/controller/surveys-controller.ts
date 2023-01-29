@@ -43,7 +43,7 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
     let user = req.user as User;
     //save survey to db
     let recipientsList: any;
-    recipientsList = recipients.split(",").map((email: string) => ({ email: email.trim() }));
+    recipientsList = recipients.split(",").map((email: string) => ({ email: email.toLowerCase().trim() }));
 
     const survey = new SurveyModel({
         title,
@@ -112,39 +112,58 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
             }
         })
         .compact()
-        .uniqBy((v) => [v.email, v.surveyId].join())
-        //update survey collection
+        // .uniqBy((v) => [v.email, v.surveyId].join())
+        .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
         .each(({ surveyId, email, choice }) => {
-            SurveyModel.findOneAndUpdate(
+            SurveyModel.updateOne(
                 {
                     _id: surveyId,
                     recipients: {
-                        $elemMatch: { email: email, responded: false },
-                    }
+                        $elemMatch: { email, responded: false },
+                    },
                 },
                 {
                     $inc: { [choice]: 1 },
                     $set: { "recipients.$.responded": true },
                     lastResponded: new Date(),
                 }
-            )
-            // SurveyModel.updateOne(
-            //     {
-            //         _id: surveyId,
-            //         recipients: {
-            //             $elemMatch: { email: email, responded: false },
-            //         },
-            //     },
-            //     {
-            //         $inc: { [choice]: 1 },
-            //         $set: { "recipients.$.responded": true },
-            //         lastResponded: new Date(),
-            //     }
-            // ).exec();
+            ).then(result => console.log(result));
         })
         .value();
-    console.log('events',events)
-    // loop on events async
 
+
+  //    const events = _.chain(body)
+  //      .map(({ email, url, event }) => {
+  //           if (event === "click") {
+  //               const pathname = new URL(url).pathname;
+  //               const match = p.test(pathname);
+  //               console.log("match", match, pathname);
+  //               if (match) {
+  //                   return { email, surveyId: match.surveyId, choice: match.choice };
+  //               }
+  //           }
+  //     })
+  //   .compact()
+  //   .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
+  //   .map(({ surveyId, email, choice }) => ({
+  //     updateOne: {
+  //       filter: {
+  //         _id: surveyId,
+  //         recipients: {
+  //           $elemMatch: { email: email, responded: false },
+  //         },
+  //       },
+  //       update: {
+  //         $inc: { [choice]: 1 },
+  //         $set: { 'recipients.$.responded': true },
+  //         lastResponded: new Date(),
+  //       },
+  //     },
+  //   }))
+  //   .value();
+  //
+  // await SurveyModel.bulkWrite(events, { ordered: false });
+
+    console.log('events',events)
     res.send({ message: "Thanks for your feedback", events });
 };
