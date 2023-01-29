@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { Recipient, Survey } from "../types/survey";
+import {  Survey } from "../types/survey";
 import SurveyModel from "../models/survay-schema";
 import { User } from "../types/user";
 import userModel from "../models/user-schema";
@@ -8,6 +8,8 @@ import { surveyTemplate } from "../helpers/emailTemplate";
 import _ from "lodash";
 import { Path } from "path-parser";
 import { URL } from "url";
+
+
 
 interface SurveyRequestBody extends Omit<Survey, "recipients"> {
     recipients: string;
@@ -69,23 +71,6 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
         res.send(422).send(e);
     }
 
-    //use @sendgrid/mail functional approach
-    // const mailer= Mailer(survey,surveyTemplate(survey));
-    // try {
-    //     console.log('mailer',mailer,survey)
-    //      await mailer.send()
-    // }catch (e) {
-    //     console.log(e)
-    //     return res.send({error:e});
-    // }
-    // // save
-    // try {
-    //      await survey.save();
-    //     const userData =  await userModel.findOneAndUpdate({_id:user.id},{$inc:{'credits':-1}})
-    //     res.status(201).send({message:'Survey created successfully',survey,user:userData});
-    // }catch (e) {
-    //     res.status(500).send({error:'Something went wrong'});
-    // }
 };
 
 export const getSurveysThanks = (req: Request, res: Response, next: NextFunction) => {
@@ -100,8 +85,10 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
     console.log("recordSurveyFeedback", req.body);
     let { body } = req as WebhookData;
     const p = new Path("/api/surveys/:surveyId/:choice");
-    const events = _.chain(body)
-        .map(({ email, url, event }) => {
+
+    //  .uniqBy((v) => [v.email, v.surveyId].join())
+     const events = _.chain(body)
+       .map(({ email, url, event }) => {
             if (event === "click") {
                 const pathname = new URL(url).pathname;
                 const match = p.test(pathname);
@@ -110,61 +97,26 @@ export const recordSurveyFeedback = async (req: Request, res: Response, next: Ne
                     return { email, surveyId: match.surveyId, choice: match.choice };
                 }
             }
-        })
-        .compact()
-        // .uniqBy((v) => [v.email, v.surveyId].join())
-        .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
-        .map(({ surveyId, email, choice }) => {
-           return SurveyModel.updateOne(
-                {
-                    _id: surveyId,
-                    recipients: {
-                        $elemMatch: { email, responded: false },
-                    },
-                },
-                {
-                    $inc: { [choice]: 1 },
-                    $set: { "recipients.$.responded": true },
-                    lastResponded: new Date(),
-                }
-            );
-        })
-        .value();
-    await Promise.all(events).then((res)=>console.log('res',res));
+      })
+    .compact()
+    .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
+    .each(({ surveyId, email, choice }) => {
+             SurveyModel.updateOne(
+                 {
+                     _id: surveyId,
+                     recipients: {
+                         $elemMatch: { email: email, responded: false },
+                     },
+                 },
+                 {
+                     $inc: { [choice]: 1 },
+                     $set: { 'recipients.$.responded': true },
+                     lastResponded: new Date(),
+                 }
+             ).exec();
+     })
+    .value();
+    console.log('events',events);
 
-
-  //    const events = _.chain(body)
-  //      .map(({ email, url, event }) => {
-  //           if (event === "click") {
-  //               const pathname = new URL(url).pathname;
-  //               const match = p.test(pathname);
-  //               console.log("match", match, pathname);
-  //               if (match) {
-  //                   return { email, surveyId: match.surveyId, choice: match.choice };
-  //               }
-  //           }
-  //     })
-  //   .compact()
-  //   .uniqWith((i, j) => i.email === j.email && i.surveyId === j.surveyId)
-  //   .map(({ surveyId, email, choice }) => ({
-  //     updateOne: {
-  //       filter: {
-  //         _id: surveyId,
-  //         recipients: {
-  //           $elemMatch: { email: email, responded: false },
-  //         },
-  //       },
-  //       update: {
-  //         $inc: { [choice]: 1 },
-  //         $set: { 'recipients.$.responded': true },
-  //         lastResponded: new Date(),
-  //       },
-  //     },
-  //   }))
-  //   .value();
-  //
-  // await SurveyModel.bulkWrite(events, { ordered: false });
-
-    console.log('events',events)
     res.send({ message: "Thanks for your feedback", events });
 };
