@@ -12,6 +12,7 @@ router.get(
     passport.authenticate('google'),
     (req, res) => {
         //get cookie session  token
+        console.log('get cookie session  token');
         console.log(req.session)
         console.log(req.user)
         const expires = 30*24 * 60 * 60 * 1000;
