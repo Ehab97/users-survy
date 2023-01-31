@@ -53,8 +53,8 @@ app.use((req, res, next) => {
 const corsOptions = {
     origin: ['http://localhost:3000','https://feedbox-sigma.vercel.app','https://feedbox.onrender.com'],
     credentials: true,
-    optionsSuccessStatus: 200
-
+    optionsSuccessStatus: 200,
+    exposedHeaders: ["set-cookie"]
 };
 app.use(cors(corsOptions));
 
