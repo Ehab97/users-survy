@@ -1,5 +1,6 @@
 import express from 'express';
 import passport from '../middleware/passport';
+import {setCookie} from "../controller/passport-controller";
 
 const router = express.Router();
 
@@ -10,15 +11,16 @@ router.get('/auth/google',passport.authenticate('google',{
 router.get(
     `/auth/google/callback`,
     passport.authenticate('google'),
+    setCookie,
     (req, res) => {
         //get cookie session  token
         console.log('get cookie session  token');
         console.log(req.session)
         console.log(req.user)
-        const expires = 30*24 * 60 * 60 * 1000;
-        res.cookie('user',req.user,{maxAge:expires});
-        res.redirect('https://feedbox-sigma.vercel.app/surveys');
-        // process.env.NODE_ENV?res.redirect(process.env.WEBSITE_URL+'/surveys'):res.redirect(process.env.WEBSITE_URL_LOCAL+'/surveys')
+        // const expires = 30*24 * 60 * 60 * 1000;
+        // res.cookie('user',req.user,{maxAge:expires});
+        // res.redirect('https://feedbox-sigma.vercel.app/surveys');
+        process.env.NODE_ENV?res.redirect(process.env.WEBSITE_URL+'/surveys'):res.redirect(process.env.WEBSITE_URL_LOCAL+'/surveys')
     }
 );
 
