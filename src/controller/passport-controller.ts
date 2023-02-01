@@ -42,10 +42,10 @@ export const deserializeUser= (id:string,done:Function)=>{
 };
 
 export const setCookie= (req:any, res:any, next:any) => {
-        if (req.user?._id != req.cookies["user"]){
+        if (req.user != req.cookies["user"]){
             if (req.user) {
                 const expires = 30 * 24 * 60 * 60 * 1000;
-                res.cookie("user", req.user._id, { maxAge: expires });
+                res.cookie("user", req.user, { maxAge: expires });
             }else{
                 res.clearCookie("user");
             }

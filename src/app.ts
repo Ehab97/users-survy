@@ -31,6 +31,7 @@ app.use(
         cookie:{maxAge: 30*24 * 60 * 60 * 1000},
         resave:false,
         saveUninitialized:true,
+        proxy:true,
         store: MongoStore.create({
             mongoUrl: mongoAtlasURI,
             // mongoUrl: DB_URL,
@@ -54,7 +55,8 @@ const corsOptions = {
     origin: ['http://localhost:3000','https://feedbox-sigma.vercel.app','https://feedbox.onrender.com'],
     credentials: true,
     optionsSuccessStatus: 200,
-    exposedHeaders: ["set-cookie"]
+    exposedHeaders: ["set-cookie"],
+    methods: 'GET, POST, PUT, DELETE',
 };
 app.use(cors(corsOptions));
 
