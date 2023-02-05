@@ -9,7 +9,7 @@ export const checkLogin=(req:Request,res:Response,next:NextFunction)=>{
 }
 
 export const checkCredits=(req:Request,res:Response,next:NextFunction)=>{
-    let user=req.user as User
+    let user= req.body.user as User;
     if(user.credits <1){
         return res.status(403).send({error:"You don't have enough credits"})
     }

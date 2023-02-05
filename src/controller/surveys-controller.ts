@@ -28,10 +28,11 @@ interface WebhookData {
 }
 
 export const getSurveys = async (req: Request, res: Response, next: NextFunction) => {
-    let user = req.user as User;
+    let user = req.body.user as User;
+    console.log('user', user);
     try {
         // const surveys = await SurveyModel.find({_user: user.id}).select({recipients: false});
-        const surveys = await SurveyModel.find({ _user: user.id });
+        const surveys = await SurveyModel.find({ _user: user.userId });
         res.status(200).json({ surveys });
     } catch (error) {
         next(error);
@@ -42,7 +43,7 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
     const RequestBody = req.body as SurveyRequestBody;
     console.log("surveyBody", RequestBody);
     let { title, subject, body, recipients } = RequestBody;
-    let user = req.user as User;
+    let user = req.body.user as User;
     //save survey to db
     let recipientsList: any;
     recipientsList = recipients.split(",").map((email: string) => ({ email: email.toLowerCase().trim() }));
@@ -52,7 +53,7 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
         subject,
         body,
         recipients: recipientsList,
-        _user: user.id,
+        _user: user.userId,
     });
     //send email to all recipients
     //use mailer class
@@ -65,7 +66,7 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
     }
     try {
         await survey.save();
-        const userData = await userModel.findOneAndUpdate({ _id: user.id }, { $inc: { credits: -1 } });
+        const userData = await userModel.findOneAndUpdate({ _id: user.userId }, { $inc: { credits: -1 } });
         res.status(201).send({ message: "Survey created successfully", survey, user: userData });
     } catch (e) {
         res.send(422).send(e);

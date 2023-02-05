@@ -1,10 +1,12 @@
 export interface User{
-    email?:string;
+    email:string;
+    password:string;
     name?:string;
-    id?:string;
+    id:string;
     googleId?:string;
     image?:string;
     credits:number
     token?:any
+    userId?:string
 }
 
