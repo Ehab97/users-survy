@@ -1,0 +1,10 @@
+# Dependency directories
+node_modules/
+# dev.js
+config/dev.js
+dev.js
+dist/
+.DS_Store
+# dotenv environment variable files
+.env
+nodemon.json

@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-import session from "express-session";
-import passport from "passport";
-import MongoStore from "connect-mongo";
-require("./middleware/passport");
+// import session from "express-session";
+// import passport from "passport";
+// import MongoStore from "connect-mongo";
+// require("./middleware/passport");
 import userAuthRoutes from "./routes/userAuth";
 import userBillingRoutes from "./routes/userBilling";
 import surveyRoutes from "./routes/surveys";
@@ -26,23 +26,23 @@ const DB_URL: string = process.env.DB_URL || "";
 app.use(express.json());
 //passport
 
-app.use(
-    session({
-        secret: process.env.COOKIE_KEY,
-        cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-        resave: false,
-        saveUninitialized: true,
-        proxy: true,
-        store: MongoStore.create({
-            mongoUrl: mongoAtlasURI,
-            // mongoUrl: DB_URL,
-            ttl: 30 * 24 * 60 * 60 * 1000,
-        }),
-    })
-);
+// app.use(
+//     session({
+//         secret: process.env.COOKIE_KEY,
+//         cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+//         resave: false,
+//         saveUninitialized: true,
+//         proxy: true,
+//         store: MongoStore.create({
+//             mongoUrl: mongoAtlasURI,
+//             // mongoUrl: DB_URL,
+//             ttl: 30 * 24 * 60 * 60 * 1000,
+//         }),
+//     })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");

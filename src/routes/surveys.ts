@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {createSurvey, getSurveys,recordSurveyFeedback,getSurveysThanks} from "../controller/surveys-controller";
-import {checkCredits, checkLogin} from "../middleware/userAuth";
+import {checkCredits} from "../middleware/userAuth";
 import {checkAuth} from "../middleware/check-auth";
 
 export const router = Router();

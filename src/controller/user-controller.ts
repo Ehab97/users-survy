@@ -6,9 +6,14 @@ import express from 'express';
 import { validationResult } from 'express-validator';
 import jwt from 'jsonwebtoken';
 import HttpError from "../models/http-Error";
+import crypto from 'crypto';
+
+type Token = {
+    id: string;
+}
 
 type RequestBody = {
-    token: any;
+    token: Token;
     user: User;
     googleId: string;
     _id: string;
@@ -18,9 +23,9 @@ type RequestParams = {
     userId: string;
 }
 
-export const userStripToken = async (req: Request, res: Response, next: NextFunction) => {
+export const userStripToken = async (req: Request, res: Response) => {
     // console.log(req.user);
-    let user = req.body.user as User;
+    const user = req.body.user as User;
     if (!user) {
         return res.status(401).send("You must login first");
     }
@@ -30,17 +35,18 @@ export const userStripToken = async (req: Request, res: Response, next: NextFunc
     const _id = body._id;
 
     const stripe = await require("stripe")(process.env.STRIPE_SECRET_KEY);
+    // const stripe=stripModule(process.env.STRIPE_SECRET_KEY);
     try {
-        const charge = await stripe.charges.create({
+         await stripe.charges.create({
             amount: 500,
             currency: "usd",
             description: "$5 for 5 credits",
             source: token.id,
         });
 
-        const userData = await userModel.findOneAndUpdate({  _id}, { $inc: { credits: 5 } });
+         await userModel.findOneAndUpdate({  _id}, { $inc: { credits: 5 } });
         const userInfo = await userModel.findOne({  _id });
-        console.log(userData,userInfo,_id)
+
         res.send({ message: "success!!", user:userInfo });
     } catch (e) {
         console.log(e);
@@ -68,14 +74,16 @@ export const userSignin = async (req: express.Request, res: express.Response, ne
     const body = req.body as User;
     const { email, password } = body;
     console.log('body', body);
+    let googleId=crypto.randomBytes(16).toString("hex");
     const createdUser: any = {
         email,
         password,
-        credits:0
+        credits:0,
+        googleId
     }
     console.log('createdUser', createdUser);
     //check if user already exists
-    let isUserExists = await userModel.findOne({ email: email });
+    const isUserExists = await userModel.findOne({ email: email });
     if (isUserExists) {
         return userLogin(req,res,next,isUserExists,password,email);
     }
@@ -84,7 +92,7 @@ export const userSignin = async (req: express.Request, res: express.Response, ne
     try {
         hashPassword = await bcrypt.hash(password, 12);
     } catch (e) {
-        let error = new HttpError(
+        const error = new HttpError(
             'Could not create user, please try again.',
             500
         );
@@ -99,9 +107,9 @@ export const userSignin = async (req: express.Request, res: express.Response, ne
         console.log(err);
         return next(new HttpError('Could not save user', 500));
     }
-    let token;
+
     try {
-        token = await jwt.sign(
+      const  token = await jwt.sign(
             { userId: user.id, email: user.email },
             'supersecret_dont_share',
             { expiresIn: '30d' }
