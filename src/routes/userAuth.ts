@@ -2,6 +2,7 @@ import express from "express";
 // import passport from "../middleware/passport";
 import {getUserById, userSignin} from "../controller/user-controller";
 import { check } from "express-validator";
+import {checkAuth} from "../middleware/check-auth";
 
 const router = express.Router();
 
@@ -40,5 +41,5 @@ const router = express.Router();
 //custom signing
 router.post("/api/signin", [check("email").normalizeEmail().isEmail(), check("password").isLength({ min: 8 })], userSignin);
 //get user by id
-router.get("/api/user/:userId", getUserById);
+router.get("/api/user/:userId", checkAuth,getUserById);
 export default router;
